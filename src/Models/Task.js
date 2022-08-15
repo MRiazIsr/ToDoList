@@ -36,7 +36,7 @@ async function getOne(id) {
     
 }
 
-async function getAll(id) {
+async function getAll() {
 
     try {
 

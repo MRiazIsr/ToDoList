@@ -4,14 +4,72 @@ const mongoose = require('mongoose');
 const url = 'http://localhost:3000/todo';
 
 
-
 describe('GET /list', () => {
-    it("200", async () => {
-        const response = await request(url).get('/task/get');
+
+    let id = new mongoose.Types.ObjectId();
+
+    const newTask = {
+        _id : id,
+        name : "TDD",
+        task : "Do Test",
+        is_completed : false,
+        todo_when : Date.now()
+    }
+
+    beforeAll(async () => {
+        await request(url).post("/task/create").send(newTask);
+    })  
+
+    afterAll(async () => {
+        let idToDelete = { id : id }
+        await request(url).delete("/task/delete").send(idToDelete);
+    })
+
+    it("list exist 200", async () => {
+        const response = await request(url).get('/list');
+        const responseLength = Object.keys(response.body).length > 0;
+
         expect(response.statusCode).toBe(200);
-        expect(response.error).toBe(false);
+        expect(responseLength).toBe(true);
     })
 })
+describe('GET /task/get', () => {
+
+    let id = new mongoose.Types.ObjectId();
+
+    const newTask = {
+        _id : id,
+        name : "TDD",
+        task : "Do Test",
+        is_completed : false,
+        todo_when : Date.now()
+    }
+
+    beforeAll(async () => {
+        await request(url).post("/task/create").send(newTask);
+    })  
+
+    afterAll(async () => {
+        let idToDelete = { id : id }
+        await request(url).delete("/task/delete").send(idToDelete);
+    })
+
+    it("item exist 200", async () => {
+        const response = await request(url).get(`/task/get?id=${id}`);
+        const item = response.body;
+        const idExists = item._id == id
+        
+        expect(response.statusCode).toBe(200);
+        expect(idExists).toBe(true);
+        expect(item.name).toBe(newTask.name);
+        expect(item.task).toBe(newTask.task);
+        expect(item.timestamp).toBe(newTask.timestamp);
+        expect(item.is_complited).toBe(newTask.is_complited);
+    });      
+
+})
+
+
 
 describe('POST /task/create', () => {
 
@@ -26,15 +84,18 @@ describe('POST /task/create', () => {
     }
 
     afterAll(async () => {
-      let idToDelete = { id : id }
-      await request(url).delete("/task/delete").send(idToDelete);
-  })
+        let idToDelete = { id : id }
+        await request(url).delete("/task/delete").send(idToDelete);
+    })
 
     it('item added 200', async () => {
+
         const response = await request(url).post("/task/create").send(newTask);
         const item = response.body;
+        const idExists = item._id == id
         
         expect(response.statusCode).toBe(200);
+        expect(idExists).toBe(true);
         expect(item.name).toBe(newTask.name);
         expect(item.task).toBe(newTask.task);
         expect(item.timestamp).toBe(newTask.timestamp);

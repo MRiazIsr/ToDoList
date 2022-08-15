@@ -12,11 +12,9 @@ exports.getTask = async function (req, res){
 
 exports.getAllTasks = async function (req, res){
     
-    let params = req.query;
-
     //validator on param
     
-    let tasks = await toDoModel.getAll(params.id);
+    let tasks = await toDoModel.getAll();
 
     res.send(tasks);
 }    
