@@ -27,9 +27,8 @@ function handleError(action, error) {
     console.log(error); 
 }
 
-const callOpenConnection = openConnection(url);
-const callCloseConnection = closeConnection();
+const callOpenConnection = () => openConnection(url);
 
-module.exports = { openConnection, closeConnection } ;
+module.exports = { callOpenConnection, closeConnection } ;
 
         

@@ -1,4 +1,5 @@
 const request = require('supertest');
+const mongoose = require('mongoose');
 //for url need to find better solution
 const url = 'http://localhost:3000/todo';
 
@@ -6,63 +7,106 @@ const url = 'http://localhost:3000/todo';
 
 describe('GET /list', () => {
     it("200", async () => {
-        const response = await request(url).get('/list');
+        const response = await request(url).get('/task/get');
         expect(response.statusCode).toBe(200);
         expect(response.error).toBe(false);
     })
 })
 
-describe('POST /list/create', () => {
-    const newTodo = {
-        id,
-        item,
-        is_complited,
-        timestamp
-      }
-      afterAll(async () => {
-        await request(baseURL).delete(`/todo/${newTodo.id}`)
-      })
-      it('item added 201', async () => {
-        const response = await request(baseURL).post("/todo").send(newTodo);
-        const lastItem = response.body.data[response.body.data.length-1]
-        expect(response.statusCode).toBe(201);
-        expect(lastItem.item).toBe(newTodo["item"]);
-        expect(lastItem.completed).toBe(newTodo["completed"]);
-      });
+describe('POST /task/create', () => {
+
+    let id = new mongoose.Types.ObjectId();
+
+    const newTask = {
+        _id : id,
+        name : "TDD",
+        task : "Do Test",
+        is_completed : false,
+        todo_when : Date.now()
+    }
+
+    afterAll(async () => {
+      let idToDelete = { id : id }
+      await request(url).delete("/task/delete").send(idToDelete);
+  })
+
+    it('item added 200', async () => {
+        const response = await request(url).post("/task/create").send(newTask);
+        const item = response.body;
+        
+        expect(response.statusCode).toBe(200);
+        expect(item.name).toBe(newTask.name);
+        expect(item.task).toBe(newTask.task);
+        expect(item.timestamp).toBe(newTask.timestamp);
+        expect(item.is_complited).toBe(newTask.is_complited);
+
+    });
+
 })
 
-describe('PUT /list/update', () => {
-    const newTodo = {
-        // todo 
-      }
-      beforeAll(async () => {
-        await request(baseURL).post("/todo").send(newTodo);
-      })
-      afterAll(async () => {
-        await request(baseURL).delete(`/todo/${newTodo.id}`)
-      })
-      it('updated 201', async () => {
-        const response = await request(baseURL).put(`/todos/${newTodo.id}`).send({
-          completed: true,
+describe('PATCH /task/update', () => {
+    let id = new mongoose.Types.ObjectId();
+
+    const newTask = {
+        _id : id,
+        name : "TDD",
+        task : "Do Test",
+        is_completed : false,
+        todo_when : Date.now()
+    }
+
+    beforeAll(async () => {
+        await request(url).post("/task/create").send(newTask);
+    })
+    afterAll(async () => {
+        let idToDelete = { id : id }
+        await request(url).delete("/task/delete").send(idToDelete);
+    })
+    it('updated 200', async () => {
+
+        let update = { 
+          id : id,
+          is_completed : true 
+        }
+
+        const response = await request(url).patch("/task/update").send(update);
+        const item = response.body;
+
+        expect(response.statusCode).toBe(200);
+
+        Object.keys(update).forEach(key => {
+            if (key != 'id') {
+                expect(item[key]).toBe(update[key]);
+            }
         });
-        expect(response.statusCode).toBe(201);
-        expect(response.body.data.completed).toBe(true);
-      });
+    });
 })
 
 describe('DELETE /list/delete', () => {
-    const newTodo = {
-        // todo
-      }
-      beforeAll(async () => {
-        await request(baseURL).post("/todo").send(newTodo);
-      })
-      it('deleted 201', async () => {
-        const response = await request(baseURL).delete(`/todos/${newTodo.id}`);
-        const todos = response.body.data
-        const exists = todos.find(todo => {
-          newTodo.id == todoId
-        })
-        expect(exists).toBe(undefined)
-      });
+
+    let id = new mongoose.Types.ObjectId();
+
+    const newTask = {
+        _id : id,
+        name : "TDD",
+        task : "Do Test",
+        is_completed : false,
+        todo_when : Date.now()
+    }
+
+    beforeAll(async () => {
+        await request(url).post("/task/create").send(newTask);
+    })
+
+    it('deleted 200', async () => {
+
+        let idToDelete = { id : id }
+        const response = await request(url).delete("/task/delete").send(idToDelete);
+        const item = response.body;
+        const exists = item._id == id;
+
+        expect(response.statusCode).toBe(200);
+        expect(exists).toBe(true)
+
+    });
 })
