@@ -1,7 +1,8 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-//for url need to find better solution
-const url = 'http://localhost:3000/todo';
+const dotenv = require('dotenv');
+dotenv.config();
+const url = process.env.SITE_URL_TESTS;
 
 
 describe('GET /list', () => {

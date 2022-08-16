@@ -1,34 +1,41 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
-const url = process.env.DB_CONNECTION
+const errorConstants = require('../errorConstants');
+const url = process.env.DB_HOST
 
-async function openConnection(url) {
+exports.openConnection = async () => {
 
     try {
         await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true,});
-    } catch (error) {
-        handleError('Action: Connection Open.', error);
+    } catch (e) {
+        responseObject = createReturnObject(false, 'openConnection', e.toString(), errorConstants.statusServerError);
+        
+        return responseObject;
     }
 
 }
 
-async function closeConnection() {
+exports.closeConnection = async () => {
 
     try {
         await mongoose.connection.close();
     } catch (error) {
-        handleError('Action: Connection Close.', error);
+        console.log(e.toString());
     }
 
 }
 
-function handleError(action, error) {
-    console.log(error); 
-}
+createReturnObject = (status, method, result, statusCode) => {
+    let responseObject = {
+        status : status,
+        method : method,
+        result : result,
+        status_code : statusCode 
+    };
 
-const callOpenConnection = () => openConnection(url);
+    return responseObject;
+} 
 
-module.exports = { callOpenConnection, closeConnection } ;
 
         
