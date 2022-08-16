@@ -4,7 +4,6 @@ const connectDB = require('../DB/DbConnection');
 const openDBConnection = connectDB.callOpenConnection;
 const closeDbConnection = connectDB.closeConnection;
 
-
 const ToDoTaskSchema = mongoose.Schema({
 
     name: 'string',
@@ -15,6 +14,10 @@ const ToDoTaskSchema = mongoose.Schema({
 }, { timestamps: true });
 
 const toDoTasks = mongoose.model('ToDoTask', ToDoTaskSchema);
+
+const statusOk = 200;
+const statusBadRequest = 400;
+const statusServerError = 500;
 
 async function getOne(id) {
 
@@ -82,7 +85,7 @@ async function update(body) {
     let updates = {};
 
     try {
-
+        //check ofr id unset
         Object.keys(body).forEach(key => {
 
             if( key != 'id' ) { 
@@ -90,7 +93,7 @@ async function update(body) {
             }
             
         });
-        
+      
         await openDBConnection();
         let task = await toDoTasks.findOneAndUpdate(indificator, updates, {
             new: true,
@@ -109,28 +112,50 @@ async function update(body) {
     
 }
 
-async function deleteTask(id) {
+async function deleteTask(id, method) {
 
     let options = {select : '_id'};
 
     try {
     
-        await openDBConnection();  
+        let connection = await openDBConnection(); 
         let task = await toDoTasks.findByIdAndDelete(id, options);
-        await closeDbConnection();
-        
-        return task;
+
+        if (task === null) {
+
+            let responseObject = createReturnObject(false, method, 'Cannot find task inside collection', statusBadRequest);
+            return responseObject;
+
+        } else {
+            
+            let responseObject = createReturnObject(true, method, task, statusOk);
+            await closeDbConnection();
+            return responseObject;
+
+        }
 
     } catch (e) {
 
-        console.log(e);
-
         await closeDbConnection();
 
-        return e;
+        let responseObject = createReturnObject(false, method, e.toString(), statusServerError);
+        return responseObject;
+
     }
    
 }
+
+function createReturnObject(status, method, result, statusCode) {
+
+    let responseObject = {
+        status : status,
+        method : method,
+        result : result,
+        status_code : statusCode 
+    };
+
+    return responseObject;
+} 
 
 
 module.exports = {getOne, create, update, deleteTask, getAll};
