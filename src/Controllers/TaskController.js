@@ -21,6 +21,7 @@ exports.getAllTasks = async function (req, res){
    
 
 exports.createTask = async function (req,res) {
+    
     let body = req.body;
 
     //validator on param
@@ -42,8 +43,8 @@ exports.deleteTask = async function (req, res) {
     let params = req.body;
     //validator on param
     
-    let task = await toDoModel.deleteTask(params.id);
-    res.send(task);
+    let task = await toDoModel.deleteTask(params.id, 'deleteTask');
+    res.status(task.status_code).send(task);
 }
 
 
