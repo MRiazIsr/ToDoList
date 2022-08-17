@@ -33,10 +33,17 @@ exports.getOne = async (id, method) => {
         }
 
         const task = await toDoTasks.findById(id);
-        responseObject = createReturnObject(true, method, task, errorConstants.statusOk);
-        await connectDB.closeConnection();
         
-        return responseObject;
+        if (task === null) {
+            responseObject = createReturnObject(false, method, errorConstants.cantFind, errorConstants.statusBadRequest);
+
+            return responseObject;
+        } else {
+            responseObject = createReturnObject(true, method, task, errorConstants.statusOk);
+            await connectDB.closeConnection();
+
+            return responseObject;
+        }
     } catch (e) {
         await connectDB.closeConnection();
         responseObject = createReturnObject(false, method, e.toString(), errorConstants.statusBadRequest);
