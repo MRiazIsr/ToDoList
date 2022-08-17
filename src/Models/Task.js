@@ -1,152 +1,178 @@
 const mongoose = require('mongoose');
 const connectDB = require('../DB/DbConnection');
-
-const openDBConnection = connectDB.callOpenConnection;
-const closeDbConnection = connectDB.closeConnection;
+const errorConstants = require('../errorConstants');
 
 const ToDoTaskSchema = mongoose.Schema({
 
-    name: 'string',
-    task: 'string',
-    is_completed: 'boolean',
-    todo_when: 'date',
+    name : { 
+        type : String,
+        required : true
+    },
+    task : { 
+        type : String,
+        required : true
+    },
+    is_completed : Boolean,
+    todo_when : { 
+        type : Date,
+        required : true
+    },
 
 }, { timestamps: true });
 
 const toDoTasks = mongoose.model('ToDoTask', ToDoTaskSchema);
 
-const statusOk = 200;
-const statusBadRequest = 400;
-const statusServerError = 500;
-
-async function getOne(id) {
+exports.getOne = async (id, method) => {
+    let responseObject;
 
     try {
+        const openedConnection = await connectDB.openConnection();
 
-        await openDBConnection();
-        let task = await toDoTasks.findById(id);
-        await closeDbConnection();
-
-        return task;
-        
-    } catch (e) {
-        
-        await closeDbConnection();
-    
-        return e;
-
-    }
-    
-}
-
-async function getAll() {
-
-    try {
-
-        await openDBConnection();
-        let tasks = await toDoTasks.find();
-        await closeDbConnection();
-    
-        return tasks;
-        
-    } catch (e) {
-
-        await closeDbConnection();
-    
-        return e;
-    }
-    
-}
-
-async function create(body) {
-
-    try {
-
-        await openDBConnection();
-        let task = await toDoTasks.create(body);
-        await closeDbConnection();
-    
-        return task;
-        
-    } catch (e) {
-
-        await closeDbConnection();
-    
-        return e;
-    }
-    
-}
-
-async function update(body) {
-
-    
-
-    let indificator = { id : body.id};
-    let updates = {};
-
-    try {
-        //check ofr id unset
-        Object.keys(body).forEach(key => {
-
-            if( key != 'id' ) { 
-                updates[key] = body[key] 
-            }
-            
-        });
-      
-        await openDBConnection();
-        let task = await toDoTasks.findOneAndUpdate(indificator, updates, {
-            new: true,
-        });
-        await closeDbConnection();
-
-        return task;
-
-    } catch (e) {
-
-        await closeDbConnection();
-
-        return task;
-
-    }
-    
-}
-
-async function deleteTask(id, method) {
-
-    let options = {select : '_id'};
-
-    try {
-    
-        let connection = await openDBConnection(); 
-        let task = await toDoTasks.findByIdAndDelete(id, options);
-
-        if (task === null) {
-
-            let responseObject = createReturnObject(false, method, 'Cannot find task inside collection', statusBadRequest);
-            return responseObject;
-
-        } else {
-            
-            let responseObject = createReturnObject(true, method, task, statusOk);
-            await closeDbConnection();
-            return responseObject;
-
+        if (typeof openedConnection !== 'undefined') {
+            return openedConnection;
         }
 
-    } catch (e) {
-
-        await closeDbConnection();
-
-        let responseObject = createReturnObject(false, method, e.toString(), statusServerError);
+        const task = await toDoTasks.findById(id);
+        responseObject = createReturnObject(true, method, task, errorConstants.statusOk);
+        await connectDB.closeConnection();
+        
         return responseObject;
-
+    } catch (e) {
+        await connectDB.closeConnection();
+        responseObject = createReturnObject(false, method, e.toString(), errorConstants.statusBadRequest);
+        
+        return responseObject;
     }
-   
+    
 }
 
-function createReturnObject(status, method, result, statusCode) {
+exports.getAll = async (offsetLimitObject, method) => {
+    let responseObject;
 
+    try {
+        const openedConnection = await connectDB.openConnection();
+
+        if (typeof openedConnection !== 'undefined') {
+            return openedConnection;
+        }
+        
+        const tasks = await toDoTasks.find().skip(offsetLimitObject.offset).limit(offsetLimitObject.limit);
+        responseObject = createReturnObject(true, method, tasks, errorConstants.statusOk);
+        await connectDB.closeConnection();
+        
+        return responseObject;
+    } catch (e) {
+        await connectDB.closeConnection();
+        responseObject = createReturnObject(false, method, e.toString(), errorConstants.statusBadRequest);
+        
+        return responseObject;
+    }
+    
+}
+
+exports.create = async (body, method) => {
+    let responseObject;
+
+    try {
+        const openedConnection = await connectDB.openConnection();
+
+        if (typeof openedConnection !== 'undefined') {
+            return openedConnection;
+        }
+
+        const task = await toDoTasks.create(body);
+
+        if (task === null) {
+            responseObject = createReturnObject(false, method, cantFind, errorConstants.statusBadRequest);
+            await connectDB.closeConnection();
+
+            return responseObject;
+        } else {
+            responseObject = createReturnObject(true, method, task, errorConstants.statusOk);
+            await connectDB.closeConnection();
+
+            return responseObject;
+        }
+    } catch (e) {
+        await connectDB.closeConnection();
+        responseObject = createReturnObject(false, method, e.toString(), errorConstants.statusBadRequest);
+        
+        return responseObject;
+    }
+    
+}
+
+exports.update = async (body, method) => {
+    const id = body.id;
+    const updates = body;
+    let responseObject;
+
+    try {
+        //deleting property id of updates object, request to not update it or prevent type error
+        delete updates.id
+      
+        const openedConnection = await connectDB.openConnection();
+
+        if (typeof openedConnection !== 'undefined') {
+            return openedConnection;
+        }
+
+        const task = await toDoTasks.findByIdAndUpdate(id, updates, {
+            new: true,
+        });
+
+        if (task === null) {
+            responseObject = createReturnObject(false, method, errorConstants.cantFind, errorConstants.statusBadRequest);
+            await connectDB.closeConnection();
+
+            return responseObject;
+        } else {
+            responseObject = createReturnObject(true, method, task, errorConstants.statusOk);
+            await connectDB.closeConnection();
+
+            return responseObject;
+        }
+    } catch (e) {
+        await connectDB.closeConnection();
+        responseObject = createReturnObject(false, method, e.toString(), errorConstants.statusBadRequest);
+
+        return responseObject;
+    }
+    
+}
+
+exports.deleteTask = async (id, method) => {
+    const options = {select : '_id'};
+    let responseObject;
+
+    try {
+        const openedConnection = await connectDB.openConnection();
+
+        if (typeof openedConnection !== 'undefined') {
+            return openedConnection;
+        }
+        
+        const task = await toDoTasks.findByIdAndDelete(id, options);
+
+        if (task === null) {
+            responseObject = createReturnObject(false, method, errorConstants.cantFind, errorConstants.statusBadRequest);
+
+            return responseObject;
+        } else {
+            responseObject = createReturnObject(true, method, task, errorConstants.statusOk);
+            await connectDB.closeConnection();
+
+            return responseObject;
+        }
+    } catch (e) {
+        await connectDB.closeConnection();
+        responseObject = createReturnObject(false, method, e.toString(), errorConstants.statusBadRequest);
+
+        return responseObject;
+    } 
+}
+
+createReturnObject = (status, method, result, statusCode) => {
     let responseObject = {
         status : status,
         method : method,
@@ -156,6 +182,3 @@ function createReturnObject(status, method, result, statusCode) {
 
     return responseObject;
 } 
-
-
-module.exports = {getOne, create, update, deleteTask, getAll};

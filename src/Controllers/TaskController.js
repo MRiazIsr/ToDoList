@@ -1,50 +1,123 @@
 const toDoModel = require('../Models/Task');
+const errorConstants = require('../errorConstants');
 
-exports.getTask = async function (req, res){
-    
-    let params = req.query;
+exports.getTask = async (req, res) => {
+    const id = req.query.id;
+    let result;
 
-    //validator on param
-    
-    let task = await toDoModel.getOne(params.id);
-    res.send(task);
+    if (typeof id === 'undefined') {
+        result = createReturnObject(false, 'getTask', errorConstants.idIsRequired, errorConstants.statusBadRequest);
+        res.status(result.status_code).send(result);
+
+        return
+    } 
+
+    try{
+        result = await toDoModel.getOne(id, 'getOne');
+    } catch(e) {
+        result = createReturnObject(false, 'getTask', e.toString(), errorConstants.statusServerError);
+    }
+
+    res.status(result.status_code).send(result);
+        
 }
 
-exports.getAllTasks = async function (req, res){
-    
-    //validator on param
-    
-    let tasks = await toDoModel.getAll();
+exports.getAllTasks = async (req, res) => {
+    const offsetLimitObject = { 
+        offset : req.query.offset ?? 0,
+        limit : req.query.limit
+    };
 
-    res.send(tasks);
+    let result;
+
+    if (typeof offsetLimitObject.limit === 'undefined') {
+        result = createReturnObject(false, 'getTask', errorConstants.limitIsRequired, errorConstants.statusBadRequest);
+        res.status(result.status_code).send(result);
+
+        return;
+    } 
+
+    try{
+        result = await toDoModel.getAll(offsetLimitObject, 'getAll');  
+    } catch(e) {
+        result = createReturnObject(false, 'getresult', e.toString(), errorConstants.statusServerError);
+    }
+
+    res.status(result.status_code).send(result);
+
 }    
    
 
-exports.createTask = async function (req,res) {
-    
+exports.createTask = async (req,res) => {
     let body = req.body;
+    let result;
 
-    //validator on param
+    if (typeof body === 'undefined') {
+        result = createReturnObject(false, 'getTask', errorConstants.idIsRequired, errorConstants.statusBadRequest);
+        res.status(result.status_code).send(result);
+
+        return;
+    } 
     
-    let task = await toDoModel.create(body);
-    res.send(task);
+    try{
+        result = await toDoModel.create(body, 'createTask');
+    } catch(e) {
+        result = createReturnObject(false, 'getresult', e.toString(), errorConstants.statusServerError);
+    }
+     
+    res.status(result.status_code).send(result);
+
 }
 
-exports.updateTask = async function (req, res) {
-    let body = req.body;
+exports.updateTask = async (req, res) => {
+    const body = req.body;
+    let result;
 
-    //validator on param
-    console.log(body)
-    let task = await toDoModel.update(body);
-    res.send(task);
-}
+    if (typeof body === 'undefined' || typeof body.id === 'undefined') {
+        result = createReturnObject(false, 'getTask', errorConstants.idIsRequired, errorConstants.statusBadRequest);
+        res.status(result.status_code).send(result);
 
-exports.deleteTask = async function (req, res) {
-    let params = req.body;
-    //validator on param
+        return;
+    }
     
-    let task = await toDoModel.deleteTask(params.id, 'deleteTask');
-    res.status(task.status_code).send(task);
+    try{
+        result = await toDoModel.update(body, 'updateTask');
+    } catch(e) {
+        result = createReturnObject(false, 'getresult', e.toString(), errorConstants.statusServerError);
+    }
+   
+    res.status(result.status_code).send(result);
 }
 
+exports.deleteTask = async (req, res) => {
+    console.log(req.body)
+    const id = req.body.id;
+    let result;
+
+    if (typeof id === 'undefined') {
+        result = createReturnObject(false, 'getTask', errorConstants.idIsRequired, errorConstants.statusBadRequest);
+        res.status(result.status_code).send(result);
+
+        return;
+    }
+
+    try{
+        result = await toDoModel.deleteTask(id, 'deleteTask');
+    } catch(e) {
+        result = createReturnObject(false, 'getresult', e.toString(), errorConstants.statusServerError);
+    }
+    
+    res.status(result.status_code).send(result);
+}
+
+createReturnObject = (status, method, result, statusCode) => {
+    let responseObject = {
+        status : status,
+        method : method,
+        result : result,
+        status_code : statusCode 
+    };
+
+    return responseObject;
+}
 

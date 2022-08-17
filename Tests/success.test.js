@@ -1,19 +1,22 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-//for url need to find better solution
-const url = 'http://localhost:3000/todo';
-
+const dotenv = require('dotenv');
+const errorConstants = require('../src/errorConstants');
+dotenv.config();
+const url = process.env.SITE_URL_TESTS;
 
 describe('GET /list', () => {
-
-    let id = new mongoose.Types.ObjectId();
-
+    const id = new mongoose.Types.ObjectId();
     const newTask = {
         _id : id,
         name : "TDD",
         task : "Do Test",
         is_completed : false,
         todo_when : Date.now()
+    }
+    const offsetLimitObject = {
+        offset : 0,
+        limit : 2
     }
 
     beforeAll(async () => {
@@ -25,18 +28,18 @@ describe('GET /list', () => {
         await request(url).delete("/task/delete").send(idToDelete);
     })
 
-    it("list exist 200", async () => {
-        const response = await request(url).get('/list');
-        const responseLength = Object.keys(response.body).length > 0;
+    it("List exists. Status code: 200", async () => {
+        const response = await request(url).get(`/list?offset=${offsetLimitObject.offset}&limit=${offsetLimitObject.limit}`);
+        const body = response.body;
+        const responseLength = Object.keys(body.result).length > 0;
 
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(errorConstants.statusOk);
+        expect(body.status).toBe(true);
         expect(responseLength).toBe(true);
     })
 })
 describe('GET /task/get', () => {
-
-    let id = new mongoose.Types.ObjectId();
-
+    const id = new mongoose.Types.ObjectId();
     const newTask = {
         _id : id,
         name : "TDD",
@@ -54,17 +57,17 @@ describe('GET /task/get', () => {
         await request(url).delete("/task/delete").send(idToDelete);
     })
 
-    it("item exist 200", async () => {
+    it("Taks exists. Status code: 200", async () => {
         const response = await request(url).get(`/task/get?id=${id}`);
-        const item = response.body;
-        const idExists = item._id == id
+        const body = response.body;
+        const checkId = body.result._id == id;
         
-        expect(response.statusCode).toBe(200);
-        expect(idExists).toBe(true);
-        expect(item.name).toBe(newTask.name);
-        expect(item.task).toBe(newTask.task);
-        expect(item.timestamp).toBe(newTask.timestamp);
-        expect(item.is_complited).toBe(newTask.is_complited);
+        expect(response.statusCode).toBe(errorConstants.statusOk);
+        expect(body.status).toBe(true);
+        expect(body.result.name).toBe(newTask.name);
+        expect(body.result.task).toBe(newTask.task);
+        expect(body.result.timestamp).toBe(newTask.timestamp);
+        expect(body.result.is_complited).toBe(newTask.is_complited);
     });      
 
 })
@@ -72,9 +75,7 @@ describe('GET /task/get', () => {
 
 
 describe('POST /task/create', () => {
-
-    let id = new mongoose.Types.ObjectId();
-
+    const id = new mongoose.Types.ObjectId();
     const newTask = {
         _id : id,
         name : "TDD",
@@ -88,21 +89,20 @@ describe('POST /task/create', () => {
         await request(url).delete("/task/delete").send(idToDelete);
     })
 
-    it('item added 200', async () => {
+    it('Task created. Status code 200', async () => {
 
         const response = await request(url).post("/task/create").send(newTask);
-        const item = response.body;
-        const idExists = item._id == id
+        const body = response.body;
+        const idExists = body.result._id == id
         
         expect(response.statusCode).toBe(200);
         expect(idExists).toBe(true);
-        expect(item.name).toBe(newTask.name);
-        expect(item.task).toBe(newTask.task);
-        expect(item.timestamp).toBe(newTask.timestamp);
-        expect(item.is_complited).toBe(newTask.is_complited);
-
+        expect(body.status).toBe(true);
+        expect(body.result.name).toBe(newTask.name);
+        expect(body.result.task).toBe(newTask.task);
+        expect(body.result.timestamp).toBe(newTask.timestamp);
+        expect(body.result.is_complited).toBe(newTask.is_complited);
     });
-
 })
 
 describe('PATCH /task/update', () => {
@@ -123,7 +123,7 @@ describe('PATCH /task/update', () => {
         let idToDelete = { id : id }
         await request(url).delete("/task/delete").send(idToDelete);
     })
-    it('updated 200', async () => {
+    it('Task updated. status code 200', async () => {
 
         let update = { 
           id : id,
@@ -131,13 +131,14 @@ describe('PATCH /task/update', () => {
         }
 
         const response = await request(url).patch("/task/update").send(update);
-        const item = response.body;
+        const body = response.body;
 
         expect(response.statusCode).toBe(200);
+        expect(body.status).toBe(true);
 
         Object.keys(update).forEach(key => {
-            if (key != 'id') {
-                expect(item[key]).toBe(update[key]);
+            if (key !== 'id') {
+                expect(body.result[key]).toBe(update[key]);
             }
         });
     });
@@ -159,14 +160,15 @@ describe('DELETE /list/delete', () => {
         await request(url).post("/task/create").send(newTask);
     })
 
-    it('deleted 200', async () => {
+    it('Task deleted. Status code 200', async () => {
 
         let idToDelete = { id : id }
         const response = await request(url).delete("/task/delete").send(idToDelete);
-        const item = response.body;
-        const exists = item._id == id;
+        const body = response.body;
+        const exists = body.result._id == id;
 
         expect(response.statusCode).toBe(200);
+        expect(body.status).toBe(true);
         expect(exists).toBe(true)
 
     });
