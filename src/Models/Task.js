@@ -148,7 +148,7 @@ exports.deleteTask = async (id, method) => {
     try {
         const openedConnection = await connectDB.openConnection();
 
-        if (openedConnection.status === false) {
+        if (typeof openedConnection !== 'undefined') {
             return openedConnection;
         }
         

@@ -90,6 +90,7 @@ exports.updateTask = async (req, res) => {
 }
 
 exports.deleteTask = async (req, res) => {
+    console.log(req.body)
     const id = req.body.id;
     let result;
 
