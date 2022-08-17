@@ -7,7 +7,6 @@ const url = process.env.DB_CONNECTION
 exports.openConnection = async () => {
 
     try {
-        console.log(url);
         await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true,});
     } catch (e) {
         responseObject = createReturnObject(false, 'openConnection', e.toString(), errorConstants.statusServerError);
