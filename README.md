@@ -19,19 +19,18 @@
 * Request format: JSON,
 * Header: Content-type - Application/json
 
-
-* Get One Task By Id:<br>
-
-|       URI        |      TYPE     |     PARAMS    |      PARAM TYPE      |     REQUIRED     |     DEFAULT    |
-|:----------------:|:-------------:|:-------------:|:--------------------:|:----------------:|:--------------:|     
-|  /todo/task/get  |      GET      |       id      |   Url PARAM (?id=)   |       TRUE       |                |
-
 * Get List Of Tasks:<br>  
 
 |        URI       |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
 |:----------------:|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
 |     /todo/list   |      GET      |     limit     |  Url PARAM (?id=) |       TRUE       |                |
 |                  |               |     offset    |  Url PARAM (?id=) |       FALSE      |       0        |
+
+* Get One Task By Id:<br>
+
+|       URI        |      TYPE     |     PARAMS    |      PARAM TYPE      |     REQUIRED     |     DEFAULT    |
+|:----------------:|:-------------:|:-------------:|:--------------------:|:----------------:|:--------------:|     
+|  /todo/task/get  |      GET      |       id      |   Url PARAM (?id=)   |       TRUE       |                |
 
 * Create Task:<br> 
 
