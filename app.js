@@ -19,4 +19,4 @@ returnErrorFiles = (path) => {
   return file.toString();
 }
 
-app.listen(process.env.PORT, () => console.log("Aplication Started"));
+app.listen(process.env.PORT, () => console.log("Aplication Started On Port: " + process.env.PORT));
