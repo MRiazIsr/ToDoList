@@ -9,22 +9,16 @@
 * Mongose for operations with mongodb  
 ---------------------------------------------------------------------------------- 
 ### To start the application:
-* Clone project from: https://github.com/MRiazIsr/ToDoList.git  
-* Run the "npm install" command
+* Clone project from: https://github.com/MRiazIsr/ToDoList.git
 * Create ".env" file from "env.examle"  
+* Get database connection url form the mail and update .env DB_CONNECTION  
+* Run the "npm install" command
 * Run the "npm run start"
 * To test fail cases run "npm test fail", and "npm run success" for success cases  
 ------------------------------------------------------------------------------------------------------------------    
 ### API Documentation (postman)
 * Request format: JSON,
 * Header: Content-type - Application/json
-
-
-* Get One Task By Id:<br>
-
-|       URI        |      TYPE     |     PARAMS    |      PARAM TYPE      |     REQUIRED     |     DEFAULT    |
-|:----------------:|:-------------:|:-------------:|:--------------------:|:----------------:|:--------------:|     
-|  /todo/task/get  |      GET      |       id      |   Url PARAM (?id=)   |       TRUE       |                |
 
 * Get List Of Tasks:<br>  
 
@@ -33,6 +27,12 @@
 |     /todo/list   |      GET      |     limit     |  Url PARAM (?id=) |       TRUE       |                |
 |                  |               |     offset    |  Url PARAM (?id=) |       FALSE      |       0        |
 
+* Get One Task By Id:<br>
+
+|       URI        |      TYPE     |     PARAMS    |      PARAM TYPE      |     REQUIRED     |     DEFAULT    |
+|:----------------:|:-------------:|:-------------:|:--------------------:|:----------------:|:--------------:|     
+|  /todo/task/get  |      GET      |       id      |   Url PARAM (?id=)   |       TRUE       |                |
+
 * Create Task:<br> 
 
 |           URI           |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
@@ -40,7 +40,7 @@
 |    /todo/task/create    |     POST      |      name     |       STRING      |       TRUE       |                |
 |                         |               |      task     |       STRING      |       TRUE       |                |
 |                         |               |   todo_when   |JS TIMESTAMP(in ms)|       TRUE       |                |
-|                         |               |  is_completed |       BOOLEAN     |       FALSE      |     BOOLEAN    |
+|                         |               |  is_completed |       BOOLEAN     |       FALSE      |      FALSE     |
 
 * Update Task:<br>
 
@@ -59,13 +59,19 @@
 |    /todo/task/delete    |     DELETE    |       id      |       STRING      |       TRUE       |                |
 
 ------------------------------------------------------------------------------------------------------------------  
-### Response                                   
+
+### Response
+
 * ERROR STATUS CODES :
 - 200 Status OK,
 - 400 Bad Ruqest (Validation Problems),
 - 500 Server Error (Database Connection Error, Code Error),
-### Response examples
-* /list:<br> 
+
+### Response examples 200
+
+* /list 200: 
+ 
+ ```json
  {
     "status": true,
     "method": "getAll",
@@ -93,8 +99,11 @@
     ],
     "status_code": 200
 }
+```
 
-* /task/get:<br>
+* /task/get 200:
+
+```json
 {
     "status": true,
     "method": "getOne",
@@ -110,7 +119,11 @@
     },
     "status_code": 200
 }
-* /task/create:<br> 
+```
+
+* /task/create 200:
+
+```json
 {
     "status": true,
     "method": "createTask",
@@ -126,7 +139,30 @@
     },
     "status_code": 200
 }
-* task/delete:<br> 
+```
+* /task/update 200:
+
+```json
+{
+    "status": true,
+    "method": "updateTask",
+    "result": {
+        "_id": "62fabf43a9ebff5aa1758335",
+        "name": "make a call 2",
+        "task": "Do Test",
+        "is_completed": true,
+        "todo_when": "2022-08-15T21:48:51.682Z",
+        "createdAt": "2022-08-15T21:49:00.540Z",
+        "updatedAt": "2022-08-18T09:32:10.894Z",
+        "__v": 0
+    },
+    "status_code": 200
+}
+```
+
+* task/delete 200:
+
+```json
 {
     "status": true,
     "method": "deleteTask",
@@ -134,4 +170,62 @@
         "_id": "62fabd492e51471a9ccf8ae1"
     },
     "status_code": 200
-}      
+}
+``` 
+-------------------------------------------------------------------------------------------------------------------------------------
+### Response examples 400
+
+* /list 400: 
+ 
+ ```json
+{
+    "status": false,
+    "method": "getTask",
+    "result": "Limit Is Required",
+    "status_code": 400
+}
+```
+
+* /task/get 400:
+
+```json
+{
+    "status": false,
+    "method": "getTask",
+    "result": "Id Is Required",
+    "status_code": 400
+}
+```
+
+* /task/create 400:
+
+```json
+{
+    "status": false,
+    "method": "createTask",
+    "result": "ValidationError: todo_when: Cast to date failed for value \"false\" (type string) at path \"todo_when\"",
+    "status_code": 400
+}
+```
+
+* /task/update 400:
+
+```json
+{
+    "status": false,
+    "method": "updateTask",
+    "result": "CastError: Cast to Boolean failed for value \"4234\" (type number) at path \"is_completed\" because of \"CastError\"",
+    "status_code": 400
+}
+```
+
+* task/delete 200:
+
+```json
+{
+    "status": false,
+    "method": "getTask",
+    "result": "Id Is Required",
+    "status_code": 400
+}
+```           
