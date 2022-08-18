@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const errorConstants = require('../errorConstants');
 dotenv.config();
-const url = process.env.DB_CONNECTION
+const url = process.env.DB_CONNECTION;
 
 exports.openConnection = async () => {
 
