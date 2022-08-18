@@ -21,37 +21,42 @@
 
 
 * Get One Task By Id:<br>
-|'     'URI'    '|'    'TYPE'   '|'   'PARAMS'  '|'    'PARAM TYPE'    '|'   'REQUIRED'   '|'   'DEFAULT'  '|<br> 
-|----------------|:-------------:|:-------------:|:--------------------:|:----------------:|:--------------:|<br>         
-|'/todo/task/get'|'    'GET'    '|'     'id'    '|' 'Url PARAM (?id=)' '|'     'TRUE'     '|'              '|<br>
+
+|       URI        |      TYPE     |     PARAMS    |      PARAM TYPE      |     REQUIRED     |     DEFAULT    |
+|:----------------:|:-------------:|:-------------:|:--------------------:|:----------------:|:--------------:|     
+|  /todo/task/get  |      GET      |       id      |   Url PARAM (?id=)   |       TRUE       |                |
 
 * Get List Of Tasks:<br>  
-|      URI       |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
-|----------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
-|   /todo/list   |      GET      |     limit     |  Url PARAM (?id=) |       TRUE       |                |
-|                |               |     offset    |  Url PARAM (?id=) |       FALSE      |       0        |
+
+|        URI       |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
+|:----------------:|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
+|     /todo/list   |      GET      |     limit     |  Url PARAM (?id=) |       TRUE       |                |
+|                  |               |     offset    |  Url PARAM (?id=) |       FALSE      |       0        |
 
 * Create Task:<br> 
-|      URI              |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
-|-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
-|   /todo/task/create   |     POST      |      name     |       STRING      |       TRUE       |                |
-|                       |               |      task     |       STRING      |       TRUE       |                |
-|                       |               |   todo_when   |JS TIMESTAMP(in ms)|       TRUE       |                |
-|                       |               |  is_completed |       BOOLEAN     |       FALSE      |     BOOLEAN    |
+
+|           URI           |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
+|:-----------------------:|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
+|    /todo/task/create    |     POST      |      name     |       STRING      |       TRUE       |                |
+|                         |               |      task     |       STRING      |       TRUE       |                |
+|                         |               |   todo_when   |JS TIMESTAMP(in ms)|       TRUE       |                |
+|                         |               |  is_completed |       BOOLEAN     |       FALSE      |     BOOLEAN    |
 
 * Update Task:<br>
-|      URI              |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
-|-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
-|   /todo/task/update   |     PATCH     |       id      |       STRING      |       TRUE       |                |
-|                       |               |      name     |       STRING      |       FALSE      |                |
-|                       |               |      task     |       STRING      |       FALSE      |                |
-|                       |               |   todo_when   |      TIMESTAMP    |       FALSE      |                |
-|                       |               |  is_completed |       BOOLEAN     |       FALSE      |                |
+
+|           URI           |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
+|:-----------------------:|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
+|     /todo/task/update   |     PATCH     |       id      |       STRING      |       TRUE       |                |
+|                         |               |      name     |       STRING      |       FALSE      |                |
+|                         |               |      task     |       STRING      |       FALSE      |                |
+|                         |               |   todo_when   |      TIMESTAMP    |       FALSE      |                |
+|                         |               |  is_completed |       BOOLEAN     |       FALSE      |                |
 
 * Delete Task:<br>
-|      URI              |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
-|-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
-|   /todo/task/delete   |     DELETE    |       id      |       STRING      |       TRUE       |                |
+
+|            URI          |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
+|:-----------------------:|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
+|    /todo/task/delete    |     DELETE    |       id      |       STRING      |       TRUE       |                |
 
 ------------------------------------------------------------------------------------------------------------------  
 ### Response                                   
