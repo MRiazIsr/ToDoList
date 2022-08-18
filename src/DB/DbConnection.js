@@ -21,7 +21,7 @@ exports.closeConnection = async () => {
     try {
         await mongoose.connection.close();
     } catch (error) {
-        //here must be the call to looger servis but we haven't it so, I placed conosole.log to detect close connection iisues
+        //here must be the call to looger servies but we haven't it so, I placed conosole.log to detect close connection iisues
         console.log('Connection is not closed. Error: ' + e.toString());
     }
 
