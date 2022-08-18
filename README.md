@@ -17,7 +17,7 @@
 * To test fail cases run "npm test fail", and "npm run success" for success cases  
 ------------------------------------------------------------------------------------------------------------------    
 ### API Documentation (postman)
-* Request format: JSON,
+* Request format: JSON
 * Header: Content-type - Application/json
 
 * Get List Of Tasks:<br>  
