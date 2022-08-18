@@ -21,9 +21,9 @@
 
 
 * Get One Task By Id:<br>
-|      URI       |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
-|----------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
-| /todo/task/get |      GET      |      id       |  Url PARAM (?id=) |       TRUE       |                |
+|'     'URI'    '|'    'TYPE'   '|'   'PARAMS'  '|'    'PARAM TYPE'    '|'   'REQUIRED'   '|'   'DEFAULT'  '|<br> 
+|----------------|:-------------:|:-------------:|:--------------------:|:----------------:|:--------------:|<br>         
+|'/todo/task/get'|'    'GET'    '|'     'id'    '|' 'Url PARAM (?id=)' '|'     'TRUE'     '|'              '|<br>
 
 * Get List Of Tasks:<br>  
 |      URI       |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
@@ -36,7 +36,7 @@
 |-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
 |   /todo/task/create   |     POST      |      name     |       STRING      |       TRUE       |                |
 |                       |               |      task     |       STRING      |       TRUE       |                |
-|                       |               |   todo_when   |      TIMESTAMP    |       TRUE       |                |
+|                       |               |   todo_when   |JS TIMESTAMP(in ms)|       TRUE       |                |
 |                       |               |  is_completed |       BOOLEAN     |       FALSE      |     BOOLEAN    |
 
 * Update Task:<br>
