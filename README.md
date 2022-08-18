@@ -1,6 +1,6 @@
 # CRUD API for To Do Tasks 
-* If on github readmy params looking not readable you can open it After Application is started in borwser: 'http://localhost:3000/' 
-  
+* If on github readmy params looking not readable you can open it After Application is started in postman: 'http://localhost:3000/' 
+
 ### Technology used in the aplication: ###
 * Node.js version 18+
 * Expres.js for routing
