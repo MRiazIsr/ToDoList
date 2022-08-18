@@ -7,7 +7,7 @@
 * Jest for tests
 * Mongodb placed on aws Ireland cluster
 * Mongose for operations with mongodb  
----------------------------------------------------------------------------------- 
+------------------------------------------------------------------------------------------------------------------ 
 ### To start the application:
 * Clone project from: https://github.com/MRiazIsr/ToDoList.git
 * Create ".env" file from "env.examle"  

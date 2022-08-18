@@ -177,8 +177,6 @@ describe('PATCH /task/update', () => {
 })
 
 describe('DELETE /list/delete', () => {
-    const id = new mongoose.Types.ObjectId();
-
     it("Bad Request: Without ID. Status Code: 400", async () => {
         const response = await request(url).delete("/task/delete").send();
         const body = response.body;

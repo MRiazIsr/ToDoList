@@ -64,6 +64,7 @@ describe('GET /task/get', () => {
         
         expect(response.statusCode).toBe(errorConstants.statusOk);
         expect(body.status).toBe(true);
+        expect(checkId).toBe(true);
         expect(body.result.name).toBe(newTask.name);
         expect(body.result.task).toBe(newTask.task);
         expect(body.result.timestamp).toBe(newTask.timestamp);
