@@ -1,4 +1,6 @@
-# CRUD API for To Do Tasks    
+# CRUD API for To Do Tasks 
+* If on github readmy params looking not readable you can open it After Application is started in borwser: 'http://localhost:3000/' 
+  
 ### Technology used in the aplication: ###
 * Node.js version 18+
 * Expres.js for routing
@@ -18,18 +20,18 @@
 * Header: Content-type - Application/json
 
 
-* Get One Task By Id:
+* Get One Task By Id:<br>
 |      URI       |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
 |----------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
 | /todo/task/get |      GET      |      id       |  Url PARAM (?id=) |       TRUE       |                |
 
-* Get List Of Tasks:  
+* Get List Of Tasks:<br>  
 |      URI       |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
 |----------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
 |   /todo/list   |      GET      |     limit     |  Url PARAM (?id=) |       TRUE       |                |
 |                |               |     offset    |  Url PARAM (?id=) |       FALSE      |       0        |
 
-* Create Task: 
+* Create Task:<br> 
 |      URI              |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
 |-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
 |   /todo/task/create   |     POST      |      name     |       STRING      |       TRUE       |                |
@@ -37,7 +39,7 @@
 |                       |               |   todo_when   |      TIMESTAMP    |       TRUE       |                |
 |                       |               |  is_completed |       BOOLEAN     |       FALSE      |     BOOLEAN    |
 
-* Update Task:
+* Update Task:<br>
 |      URI              |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
 |-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
 |   /todo/task/update   |     PATCH     |       id      |       STRING      |       TRUE       |                |
@@ -46,7 +48,7 @@
 |                       |               |   todo_when   |      TIMESTAMP    |       FALSE      |                |
 |                       |               |  is_completed |       BOOLEAN     |       FALSE      |                |
 
-* Delete Task:
+* Delete Task:<br>
 |      URI              |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
 |-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
 |   /todo/task/delete   |     DELETE    |       id      |       STRING      |       TRUE       |                |
