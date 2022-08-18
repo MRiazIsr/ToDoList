@@ -13,19 +13,19 @@ describe('GET /list', () => {
         task : "Do Test",
         is_completed : false,
         todo_when : Date.now()
-    }
+    };
     const offsetLimitObject = {
         offset : 0,
-    }
+    };
 
     beforeAll(async () => {
         await request(url).post("/task/create").send(newTask);
-    })  
+    });  
 
     afterAll(async () => {
         let idToDelete = { id : id }
         await request(url).delete("/task/delete").send(idToDelete);
-    })
+    });
 
     it("Bad Request: Without Limit. Status Code: 400", async () => {
         const response = await request(url).get(`/list?offset=${offsetLimitObject.offset}`);
@@ -34,7 +34,7 @@ describe('GET /list', () => {
         expect(response.statusCode).toBe(errorConstants.statusBadRequest);
         expect(body.status).toBe(false);
         expect(body.result).toBe(errorConstants.limitIsRequired);
-    })
+    });
 })
 describe('GET /task/get', () => {
     const id = new mongoose.Types.ObjectId();
@@ -44,16 +44,16 @@ describe('GET /task/get', () => {
         task : "Do Test",
         is_completed : false,
         todo_when : Date.now()
-    }
+    };
 
     beforeAll(async () => {
         await request(url).post("/task/create").send(newTask);
-    })  
+    });  
 
     afterAll(async () => {
         let idToDelete = { id : id }
         await request(url).delete("/task/delete").send(idToDelete);
-    })
+    });
 
     it("Bad Request: Without ID. Status Code: 400", async () => {
         const response = await request(url).get(`/task/get`);
@@ -73,16 +73,16 @@ describe('GET /task/get', () => {
         task : "Do Test",
         is_completed : false,
         todo_when : Date.now()
-    }
+    };
 
     beforeAll(async () => {
         await request(url).post("/task/create").send(newTask);
-    })  
+    });  
 
     afterAll(async () => {
         let idToDelete = { id : id }
         await request(url).delete("/task/delete").send(idToDelete);
-    })
+    });
 
     it("Bad Request: Wrong ID Type. Status Code: 400", async () => {
         const response = await request(url).get(`/task/get?id=${id}`);
@@ -98,7 +98,7 @@ describe('POST /task/create', () => {
     const newTask = {
         _id : id,
         is_completed : false,
-    }
+    };
 
     it("Bad Request: Required Params Missing. Status code: 400", async () => {
         const response = await request(url).post("/task/create").send(newTask);
@@ -110,7 +110,7 @@ describe('POST /task/create', () => {
 })
 
 describe('PATCH /task/update', () => {
-    let id = new mongoose.Types.ObjectId();
+    const id = new mongoose.Types.ObjectId();
 
     const newTask = {
         _id : id,
@@ -118,19 +118,21 @@ describe('PATCH /task/update', () => {
         task : "Do Test",
         is_completed : false,
         todo_when : Date.now()
-    }
+    };
 
     beforeAll(async () => {
         await request(url).post("/task/create").send(newTask);
-    })
+    });
+
     afterAll(async () => {
         let idToDelete = { id : id }
         await request(url).delete("/task/delete").send(idToDelete);
-    })
+    });
+
     it("Bad Request: Without ID. Status Code: 400", async () => {
-        let update = { 
+        const update = { 
           is_completed : true 
-        }
+        };
 
         const response = await request(url).patch("/task/update").send(update);
         const body = response.body;
@@ -142,7 +144,7 @@ describe('PATCH /task/update', () => {
 })
 
 describe('PATCH /task/update', () => {
-    let id = new mongoose.Types.ObjectId();
+    const id = new mongoose.Types.ObjectId();
 
     const newTask = {
         _id : id,
@@ -150,15 +152,16 @@ describe('PATCH /task/update', () => {
         task : "Do Test",
         is_completed : false,
         todo_when : Date.now()
-    }
+    };
 
     beforeAll(async () => {
         await request(url).post("/task/create").send(newTask);
-    })
+    });
+
     afterAll(async () => {
         let idToDelete = { id : id }
         await request(url).delete("/task/delete").send(idToDelete);
-    })
+    });
     it("Bad Request: Bad Params Validation. Status Code: 400", async () => {
         let update = { 
             id : id,

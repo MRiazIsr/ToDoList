@@ -119,7 +119,7 @@ exports.update = async (body, method) => {
 
     try {
         //deleting property id of updates object, request to not update it or prevent type error
-        delete updates.id
+        delete updates.id;
       
         const openedConnection = await connectDB.openConnection();
 

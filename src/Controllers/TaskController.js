@@ -9,7 +9,7 @@ exports.getTask = async (req, res) => {
         result = createReturnObject(false, 'getTask', errorConstants.idIsRequired, errorConstants.statusBadRequest);
         res.status(result.status_code).send(result);
 
-        return
+        return;
     } 
 
     try{
