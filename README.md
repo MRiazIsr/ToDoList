@@ -40,7 +40,7 @@
 |    /todo/task/create    |     POST      |      name     |       STRING      |       TRUE       |                |
 |                         |               |      task     |       STRING      |       TRUE       |                |
 |                         |               |   todo_when   |JS TIMESTAMP(in ms)|       TRUE       |                |
-|                         |               |  is_completed |       BOOLEAN     |       FALSE      |     BOOLEAN    |
+|                         |               |  is_completed |       BOOLEAN     |       FALSE      |      FALSE     |
 
 * Update Task:<br>
 
