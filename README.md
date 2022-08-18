@@ -1,11 +1,11 @@
-# CRUD API for creating/updating/reading/deleting To Do Tasks  
-================================================================================================================  
+# CRUD API for To Do Tasks    
 ### Technology used in the aplication: ###
-* node.js version 18+
-* expres.js for routing
-* mongodb placed on aws Ireland cluster
-* mongose for operations with mongodb  
-------------------------------------------------------------------------------------------------------------------   
+* Node.js version 18+
+* Expres.js for routing
+* Jest for tests
+* Mongodb placed on aws Ireland cluster
+* Mongose for operations with mongodb  
+---------------------------------------------------------------------------------- 
 ### To start the application:
 * Clone project from: https://github.com/MRiazIsr/ToDoList.git  
 * Run the "npm install" command
@@ -15,33 +15,51 @@
 ------------------------------------------------------------------------------------------------------------------    
 ### API Documentation (postman)
 * Request format: JSON,
-* get one task by id - TYPE GET "/todo/task/get?" | Url params: "id" of required task | REQUIRED |
-* get one task by id - TYPE GET "/todo/list?" | Url params: "limit" of required tasks | REQUIRED | 
-                                                Url params: "offset" of required tasks | OPTIONAL, DEFAULT 0 |
+* Header: Content-type - Application/json
 
-* create task - TYPE POST "/todo/task/create" | Post params: 
-                                                "name" of required task | REQUIRED, STRING |
-                                                "task" for to do | REQUIRED, STRING |
-                                                "todo_when" of required task | REQUIRED, TIMESTAMP |
-                                                "is_completed" status of task | OPTIONAL, BOOLEAN, DEFAULT false |
 
-* update task - TYPE PATCH "/todo/task/update" | Post params: 
-                                                "id" of required task | REQUIRED, STRING |
-                                                "task" for to do | OPTIONAL, STRING |
-                                                "todo_when" of required task | OPTIONAL, TIMESTAMP |
-                                                "is_completed" status of task | OPTIONAL, BOOLEAN, DEFAULT false |
+* Get One Task By Id:
+|      URI       |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
+|----------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
+| /todo/task/get |      GET      |      id       |  Url PARAM (?id=) |       TRUE       |                |
 
-* delete task - TYPE DELETE "/todo/task/delete" | Post params: 
-                                                "id" of required task | REQUIRED, STRING |
+* Get List Of Tasks:  
+|      URI       |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
+|----------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
+|   /todo/list   |      GET      |     limit     |  Url PARAM (?id=) |       TRUE       |                |
+|                |               |     offset    |  Url PARAM (?id=) |       FALSE      |       0        |
+
+* Create Task: 
+|      URI              |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
+|-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
+|   /todo/task/create   |     POST      |      name     |       STRING      |       TRUE       |                |
+|                       |               |      task     |       STRING      |       TRUE       |                |
+|                       |               |   todo_when   |      TIMESTAMP    |       TRUE       |                |
+|                       |               |  is_completed |       BOOLEAN     |       FALSE      |     BOOLEAN    |
+
+* Update Task:
+|      URI              |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
+|-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
+|   /todo/task/update   |     PATCH     |       id      |       STRING      |       TRUE       |                |
+|                       |               |      name     |       STRING      |       FALSE      |                |
+|                       |               |      task     |       STRING      |       FALSE      |                |
+|                       |               |   todo_when   |      TIMESTAMP    |       FALSE      |                |
+|                       |               |  is_completed |       BOOLEAN     |       FALSE      |                |
+
+* Delete Task:
+|      URI              |      TYPE     |    PARAMS     |     PARAM TYPE    |     REQUIRED     |     DEFAULT    | 
+|-----------------------|:-------------:|:-------------:|:-----------------:|:----------------:|:--------------:|         
+|   /todo/task/delete   |     DELETE    |       id      |       STRING      |       TRUE       |                |
+
 ------------------------------------------------------------------------------------------------------------------  
 ### Response                                   
 * ERROR STATUS CODES :
 - 200 Status OK,
 - 400 Bad Ruqest (Validation Problems),
 - 500 Server Error (Database Connection Error, Code Error),
-* Response examples
-- /list 
-{
+### Response examples
+* /list:<br> 
+ {
     "status": true,
     "method": "getAll",
     "result": [
@@ -68,7 +86,8 @@
     ],
     "status_code": 200
 }
-* /task/get: 
+
+* /task/get:<br>
 {
     "status": true,
     "method": "getOne",
@@ -84,7 +103,7 @@
     },
     "status_code": 200
 }
-* /task/create:
+* /task/create:<br> 
 {
     "status": true,
     "method": "createTask",
@@ -100,7 +119,7 @@
     },
     "status_code": 200
 }
-* task/delete:
+* task/delete:<br> 
 {
     "status": true,
     "method": "deleteTask",
@@ -108,6 +127,4 @@
         "_id": "62fabd492e51471a9ccf8ae1"
     },
     "status_code": 200
-}
-
-                                             
+}      
