@@ -219,7 +219,7 @@
 }
 ```
 
-* task/delete 200:
+* task/delete 400:
 
 ```json
 {
