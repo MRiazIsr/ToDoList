@@ -12,7 +12,10 @@ const ToDoTaskSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    is_completed : Boolean,
+    is_completed : {
+        type : Boolean,
+        default : false
+    },    
     todo_when : { 
         type : Date,
         required : true
