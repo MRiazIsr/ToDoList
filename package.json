@@ -1,6 +1,6 @@
 {
   "name": "todolist",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "ToDo CRUD API",
   "main": "app.js",
   "scripts": {
