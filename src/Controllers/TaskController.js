@@ -5,7 +5,7 @@ exports.getTask = async (req, res) => {
     const id = req.query.id;
     let result;
 
-    if (typeof id === 'undefined') {
+    if (id == undefined) {
         result = createReturnObject(false, 'getTask', errorConstants.idIsRequired, errorConstants.statusBadRequest);
         res.status(result.status_code).send(result);
 
@@ -30,7 +30,7 @@ exports.getAllTasks = async (req, res) => {
 
     let result;
 
-    if (typeof offsetLimitObject.limit === 'undefined') {
+    if (offsetLimitObject.limit == undefined) {
         result = createReturnObject(false, 'getTask', errorConstants.limitIsRequired, errorConstants.statusBadRequest);
         res.status(result.status_code).send(result);
 
@@ -52,7 +52,7 @@ exports.createTask = async (req,res) => {
     let body = req.body;
     let result;
 
-    if (typeof body === 'undefined') {
+    if (body == undefined) {
         result = createReturnObject(false, 'getTask', errorConstants.idIsRequired, errorConstants.statusBadRequest);
         res.status(result.status_code).send(result);
 
@@ -73,7 +73,7 @@ exports.updateTask = async (req, res) => {
     const body = req.body;
     let result;
 
-    if (typeof body === 'undefined' || typeof body.id === 'undefined') {
+    if (body == undefined || body.id == undefined) {
         result = createReturnObject(false, 'getTask', errorConstants.idIsRequired, errorConstants.statusBadRequest);
         res.status(result.status_code).send(result);
 
@@ -93,7 +93,7 @@ exports.deleteTask = async (req, res) => {
     const id = req.body.id;
     let result;
 
-    if (typeof id === 'undefined') {
+    if (id == undefined) {
         result = createReturnObject(false, 'getTask', errorConstants.idIsRequired, errorConstants.statusBadRequest);
         res.status(result.status_code).send(result);
 

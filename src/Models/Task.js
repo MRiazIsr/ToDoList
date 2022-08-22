@@ -31,7 +31,7 @@ exports.getOne = async (id, method) => {
     try {
         const openedConnection = await connectDB.openConnection();
 
-        if (typeof openedConnection !== 'undefined') {
+        if (openedConnection != undefined) {
             return openedConnection;
         }
 
@@ -62,7 +62,7 @@ exports.getAll = async (offsetLimitObject, method) => {
     try {
         const openedConnection = await connectDB.openConnection();
 
-        if (typeof openedConnection !== 'undefined') {
+        if (openedConnection != undefined) {
             return openedConnection;
         }
         
@@ -86,7 +86,7 @@ exports.create = async (body, method) => {
     try {
         const openedConnection = await connectDB.openConnection();
 
-        if (typeof openedConnection !== 'undefined') {
+        if (openedConnection != undefined) {
             return openedConnection;
         }
 
@@ -123,7 +123,7 @@ exports.update = async (body, method) => {
       
         const openedConnection = await connectDB.openConnection();
 
-        if (typeof openedConnection !== 'undefined') {
+        if (openedConnection != undefined) {
             return openedConnection;
         }
 
@@ -158,7 +158,7 @@ exports.deleteTask = async (id, method) => {
     try {
         const openedConnection = await connectDB.openConnection();
 
-        if (typeof openedConnection !== 'undefined') {
+        if (openedConnection != undefined) {
             return openedConnection;
         }
         
